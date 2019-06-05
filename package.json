@@ -1,0 +1,13 @@
+{
+    "dependencies": {
+        "three-trackballcontrols": "0.0.8",
+        "three.js": "^0.77.1"
+    },
+    "devDependencies": {
+        "webpack": "^4.32.2",
+        "webpack-cli": "^3.3.2"
+    },
+    "scripts": {
+        "build": "webpack"
+    }
+}
