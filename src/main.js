@@ -1,4 +1,4 @@
-const THREE = require("THREE");
+const THREE = require("three");
 const TrackballControls = require("three-trackballcontrols");
 
 const config = () => {
@@ -19,7 +19,7 @@ const config = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const geometry = new THREE.CubeGeometry(100, 100, 100);
 
     /**   const edges = new THREE.EdgesGeometry(geometry);
     const line = new THREE.LineSegments(
@@ -28,7 +28,6 @@ const config = () => {
     );
 
     scene.add(line);*/
-  
 
     const material = new THREE.MeshFaceMaterial([
         new THREE.MeshBasicMaterial({
@@ -59,14 +58,19 @@ const config = () => {
 
     camera.position.z = 3;
 
-    const render = () => {
-        requestAnimationFrame(render);
-        renderer.render(scene, camera);
-    };
-    render();
-
     const controls = new TrackballControls(camera);
     controls.addEventListener("change", render);
+
+    const animate = () => {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    };
+    animate();
+
+    const render = () => {
+        renderer.render(scene, camera);
+    };
 };
 
 config();
