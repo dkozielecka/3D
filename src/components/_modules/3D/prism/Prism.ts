@@ -1,4 +1,4 @@
-import { Color } from "three";
+import { Color, Geometry, Vector3, Face3 } from "three";
 
 export interface PrismConfig {
   size?: number;
@@ -20,6 +20,7 @@ export class Prism {
   activeEdgeColor: Color;
   addEdgeHelpers: boolean;
   activeEdgeIndex: number;
+  geometry: Geometry;
 
   constructor(config: PrismConfig = {}) {
     this.size = config.size ? config.size : 1;
@@ -38,5 +39,16 @@ export class Prism {
     this.activeEdgeIndex = config.activeEdgeIndex ? config.activeEdgeIndex : 0;
   }
 
-  private createPrism() {}
+  public initialize() {
+    this.createPrism();
+  }
+
+  private createPrism() {
+    this.geometry = new Geometry();
+    this.geometry.vertices.push(new Vector3(-10, 10, 0));
+    this.geometry.vertices.push(new Vector3(-10, -10, 0));
+    this.geometry.vertices.push(new Vector3(10, -10, 0));
+    this.geometry.faces.push(new Face3(0, 1, 2));
+    this.geometry.computeBoundingSphere();
+  }
 }

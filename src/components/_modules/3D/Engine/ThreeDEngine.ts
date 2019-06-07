@@ -4,7 +4,7 @@ import {
   OrthographicCamera,
   WebGLRenderer,
   Vector3
-} from "three";
+} from "./node_modules/three";
 import { Prism } from "../prism/Prism";
 
 export interface ThreeDEngineConfig {
@@ -17,6 +17,7 @@ export interface ThreeDEngineConfig {
       z: number;
     }
   ];
+  alphaBg?: boolean;
 }
 
 export class ThreeDEngine {
@@ -28,6 +29,7 @@ export class ThreeDEngine {
   renderer: WebGLRenderer;
   canvas: HTMLDivElement;
   cameraPosition;
+  alphaBg: boolean;
 
   constructor(config?: ThreeDEngineConfig) {
     this.height = config.height;
@@ -35,6 +37,7 @@ export class ThreeDEngine {
     this.cameraPosition = config.cameraPosition
       ? config.cameraPosition
       : [{ x: 0, y: 0, z: 10 }];
+    this.alphaBg = config.cameraPosition ? config.alphaBg : true;
   }
 
   public initialize() {
@@ -66,7 +69,7 @@ export class ThreeDEngine {
 
     this.scene.add(this.camera);
 
-    this.renderer = new WebGLRenderer({ alpha: true });
+    this.renderer = new WebGLRenderer({ alpha: this.alphaBg });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.canvas.appendChild(this.renderer.domElement);
   }
