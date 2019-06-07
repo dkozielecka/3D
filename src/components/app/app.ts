@@ -1,17 +1,17 @@
 import "./app.scss";
-//import * as THREE from "three";
-import { Prism } from "../_modules/prism/Prism";
+import { ThreeDEngine } from "../_modules/3D/Engine/ThreeDEngine";
 
-class Matlandia {
-  height: number;
-  width: number;
-  cube: Prism;
-  constructor(height: number, width: number) {
-    this.height = height;
-    this.width = width;
+class WorkSapce {
+  threeEngine: ThreeDEngine;
+  constructor() {}
+
+  public initialize() {
+    this.threeEngine = new ThreeDEngine({
+      height: window.innerHeight,
+      width: window.innerWidth
+    });
   }
 }
 
-const matlndia = new Matlandia(5, 4);
-
-console.log(matlndia);
+const workspace = new WorkSapce();
+workspace.initialize();
