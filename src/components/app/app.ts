@@ -1,5 +1,5 @@
 import "./app.scss";
-import * as THREE from "three";
+//import * as THREE from "three";
 import { Prism } from "../_modules/prism/Prism";
 
 class Matlandia {

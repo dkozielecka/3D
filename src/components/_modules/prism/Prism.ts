@@ -1,3 +1,12 @@
-import * as THREE from "three";
+//import * as THREE from "three";
 
-export class Prism {}
+interface PrismConfig {
+  size?: number;
+  sideColors: //Color[];
+}
+
+export class Prism {
+  constructor() {}
+
+  private createPrism() {}
+}
