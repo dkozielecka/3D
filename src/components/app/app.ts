@@ -10,6 +10,8 @@ class WorkSapce {
       height: window.innerHeight,
       width: window.innerWidth
     });
+
+    this.threeEngine.initialize();
   }
 }
 
