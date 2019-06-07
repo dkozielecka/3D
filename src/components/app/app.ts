@@ -13,3 +13,5 @@ class Matlandia {
 }
 
 const matlndia = new Matlandia(5, 4);
+
+console.log(matlndia);

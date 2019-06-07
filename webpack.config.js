@@ -14,12 +14,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
-        loader: "babel-loader"
-      },
-      {
-        test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
+        test: /\.js$/,
+        exclude: /(node_modules)/,
         use: {
           loader: "babel-loader",
           options: {
@@ -27,6 +23,19 @@ module.exports = {
           }
         }
       },
+      {
+        test: /\.ts$/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env"]
+            }
+          },
+          "ts-loader"
+        ]
+      },
+
       {
         test: /\.scss$/,
         use: [

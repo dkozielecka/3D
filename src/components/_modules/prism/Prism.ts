@@ -2,7 +2,6 @@
 
 interface PrismConfig {
   size?: number;
-  sideColors: //Color[];
 }
 
 export class Prism {
