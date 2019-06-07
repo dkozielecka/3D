@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-  entry: "./src/components/app/app.js",
+  entry: "./src/components/app/app.ts",
   output: {
     filename: "app.bundle.js",
     path: path.resolve(__dirname, "build")
@@ -14,18 +14,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(ts|tsx)$/,
         loader: "babel-loader"
       },
       {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env"]
-          }
-        }
+        test: /\.(jsx?)$/,
+        loaders: ["babel"],
+        exclude: [/node_modules/]
       },
       {
         test: /\.scss$/,
@@ -43,6 +38,7 @@ module.exports = {
       }
     ]
   },
+  resolve: { extensions: [".js", ".jsx", ".tsx", ".ts", ".json"] },
   stats: {
     colors: true
   },
