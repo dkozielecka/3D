@@ -1,5 +1,8 @@
 const path = require("path");
 const webpack = require("webpack");
+const WriteFilePlugin = require("write-file-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: "./src/components/app/app.js",
@@ -44,5 +47,17 @@ module.exports = {
     contentBase: path.join(__dirname, "build"),
     compress: true,
     port: 9000
-  }
+  },
+  plugins: [
+    new WriteFilePlugin(),
+    new CleanWebpackPlugin({
+      cleanAfterEveryBuildPatterns: ["build/*.*"]
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: path.join(__dirname, "src/static"),
+        to: path.join(__dirname, "build")
+      }
+    ])
+  ]
 };
