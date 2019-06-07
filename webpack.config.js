@@ -1,13 +1,48 @@
-module.exports = {
-    entry: ["./src/main.js"],
-    output: {
-        path: "/Users/dkozielecka/Front/3D/build",
-        filename: "bundle.js"
-    },
+const path = require("path");
+const webpack = require("webpack");
 
-    watch: true,
-    watchOptions: {
-        ignored: /node_modules/,
-        poll: 1000
-    }
+module.exports = {
+  entry: "./src/components/app/app.js",
+  output: {
+    filename: "app.bundle.js",
+    path: path.resolve(__dirname, "build")
+  },
+
+  module: {
+    rules: [
+      {
+        test: /\.m?js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env"]
+          }
+        }
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader"
+          },
+          {
+            loader: "sass-loader"
+          }
+        ]
+      }
+    ]
+  },
+  stats: {
+    colors: true
+  },
+  devtool: "source-map",
+  devServer: {
+    contentBase: path.join(__dirname, "build"),
+    compress: true,
+    port: 9000
+  }
 };
