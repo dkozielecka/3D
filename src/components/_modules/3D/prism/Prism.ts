@@ -5,7 +5,8 @@ import {
   Color,
   EdgesGeometry,
   Vector3,
-  FaceColors
+  FaceColors,
+  MeshLambertMaterial
 } from "three";
 
 export interface PrismConfig {

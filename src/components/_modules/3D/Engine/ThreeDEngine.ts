@@ -74,8 +74,8 @@ export class ThreeDEngine {
     this.prismWidth = config.prismWidth ? config.prismWidth : 8;
     this.prismHeigth = config.prismHeigth ? config.prismHeigth : 8;
     this.verticesAmount = config.verticesAmount ? config.verticesAmount : 4;
-    this.sideColor = config.sideColor ? config.sideColor : new Color(0x71bbf2);
-    this.sideOpacity = config.sideOpacity ? config.sideOpacity : 0.8;
+    this.sideColor = config.sideColor ? config.sideColor : new Color(0x333333);
+    this.sideOpacity = config.sideOpacity ? config.sideOpacity : 0.9;
     this.edgesColor = config.edgesColor
       ? config.edgesColor
       : new Color(0x005aa9);
