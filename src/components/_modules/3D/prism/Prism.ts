@@ -1,11 +1,21 @@
-import { CylinderGeometry, MeshBasicMaterial, Mesh, Color } from "three";
+import {
+  CylinderGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  Color,
+  EdgesGeometry,
+  Vector3,
+  CylinderBufferGeometry
+} from "three";
 
 export interface PrismConfig {
-  prismWidth?: number;
-  prismHeigth?: number;
-  verticesAmount?: number;
-  sideColor?: Color;
-  sideOpacity?: number;
+  prismWidth: number;
+  prismHeigth: number;
+  verticesAmount: number;
+  sideColor: Color;
+  sideOpacity: number;
+  edgesColor: Color;
+  edgeThickness: number;
 }
 
 export class Prism {
@@ -17,17 +27,22 @@ export class Prism {
   private prism: Mesh;
   private sideColor: Color;
   private sideOpacity: number;
+  private edgesColor: Color;
+  private edgeThickness: number;
 
-  constructor(config: PrismConfig = {}) {
-    this.prismWidth = config.prismWidth ? config.prismWidth : 4;
-    this.prismHeigth = config.prismHeigth ? config.prismHeigth : 4;
-    this.verticesAmount = config.verticesAmount ? config.verticesAmount : 4;
-    this.sideColor = config.sideColor ? config.sideColor : new Color(0x71bbf2);
-    this.sideOpacity = config.sideOpacity ? config.sideOpacity : 0.8;
+  constructor(config: PrismConfig) {
+    this.prismWidth = config.prismWidth;
+    this.prismHeigth = config.prismHeigth;
+    this.verticesAmount = config.verticesAmount;
+    this.sideColor = config.sideColor;
+    this.sideOpacity = config.sideOpacity;
+    this.edgesColor = config.edgesColor;
+    this.edgeThickness = config.edgeThickness;
   }
 
   public initialize() {
     this.createPrism();
+    this.createEdges();
 
     return this.prism;
   }
@@ -47,5 +62,44 @@ export class Prism {
     });
 
     this.prism = new Mesh(this.geometry, this.material);
+  }
+  private createEdges() {
+    const edges = new EdgesGeometry(this.geometry);
+
+    for (let i = 0; i < edges.attributes.position.count - 1; i += 2) {
+      let startPoint = new Vector3(
+        edges.attributes.position.array[i * 3 + 0],
+        edges.attributes.position.array[i * 3 + 1],
+        edges.attributes.position.array[i * 3 + 2]
+      );
+      let endPoint = new Vector3(
+        edges.attributes.position.array[i * 3 + 3],
+        edges.attributes.position.array[i * 3 + 4],
+        edges.attributes.position.array[i * 3 + 5]
+      );
+
+      let cylinderLength = new Vector3()
+        .subVectors(endPoint, startPoint)
+        .length();
+      let edge: CylinderGeometry = new CylinderGeometry(
+        this.edgeThickness,
+        this.edgeThickness,
+        cylinderLength,
+        4
+      );
+
+      edge.translate(0, cylinderLength / 2, 0);
+      edge.rotateX(Math.PI / 2);
+
+      let cylinder = new Mesh(
+        edge,
+        new MeshBasicMaterial({ color: this.edgesColor })
+      );
+      cylinder.position.copy(startPoint);
+      cylinder.lookAt(endPoint);
+      cylinder.name = `edge${i / 2}`;
+
+      this.prism.add(cylinder);
+    }
   }
 }

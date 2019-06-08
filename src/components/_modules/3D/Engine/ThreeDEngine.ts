@@ -1,6 +1,7 @@
-import { Scene, OrthographicCamera, WebGLRenderer, Mesh } from "three";
-import { MouseRotator } from "../rotateController/MouseRotator";
+import { Scene, OrthographicCamera, WebGLRenderer, Mesh, Color } from "three";
+import { MouseRotator } from "../eventsHandlers/MouseRotator";
 import { Prism } from "../prism/Prism";
+import { EdgeClicker } from "../eventsHandlers/EdgeClicker";
 
 export interface ThreeDEngineConfig {
   canvasHeight: number;
@@ -15,21 +16,39 @@ export interface ThreeDEngineConfig {
   alphaBg?: boolean;
 }
 
+interface PrismConfig {
+  prismWidth?: number;
+  prismHeigth?: number;
+  verticesAmount?: number;
+  sideColor?: Color;
+  sideOpacity?: number;
+  edgesColor?: Color;
+  edgeThickness?: number;
+}
+
 export class ThreeDEngine {
-  height: number;
-  width: number;
-  scene: Scene;
-  camera: any;
-  renderer: WebGLRenderer;
-  canvas: HTMLDivElement;
-  cameraPosition;
-  alphaBg: boolean;
-  mouseRotator: MouseRotator;
-  prism: Mesh;
+  private canvasHeight: number;
+  private canvasWidth: number;
+  private scene: Scene;
+  private camera: any;
+  private renderer: WebGLRenderer;
+  private canvas: HTMLDivElement;
+  private cameraPosition;
+  private alphaBg: boolean;
+  private mouseRotator: MouseRotator;
+  private prism: Mesh;
+  private edgeClicker: EdgeClicker;
+  private prismWidth: number;
+  private prismHeigth: number;
+  private verticesAmount: number;
+  private sideColor: Color;
+  private sideOpacity: number;
+  private edgesColor: Color;
+  private edgeThickness: number;
 
   constructor(config: ThreeDEngineConfig) {
-    this.height = config.canvasHeight;
-    this.width = config.canvasWidth;
+    this.canvasHeight = config.canvasHeight;
+    this.canvasWidth = config.canvasWidth;
     this.cameraPosition = config.cameraPosition
       ? config.cameraPosition
       : [{ x: 0.2, y: 10, z: 14 }];
@@ -44,12 +63,29 @@ export class ThreeDEngine {
     return this;
   }
 
-  public createPrism() {
+  public createPrism(config: PrismConfig = {}) {
     if (this.scene === undefined) {
       throw new Error("You must 'RUN' word first");
     }
+    this.prismWidth = config.prismWidth ? config.prismWidth : 8;
+    this.prismHeigth = config.prismHeigth ? config.prismHeigth : 8;
+    this.verticesAmount = config.verticesAmount ? config.verticesAmount : 4;
+    this.sideColor = config.sideColor ? config.sideColor : new Color(0x71bbf2);
+    this.sideOpacity = config.sideOpacity ? config.sideOpacity : 0.8;
+    this.edgesColor = config.edgesColor
+      ? config.edgesColor
+      : new Color(0x005aa9);
+    this.edgeThickness = config.edgeThickness ? config.edgeThickness : 0.1;
 
-    this.prism = new Prism({}).initialize();
+    this.prism = new Prism({
+      verticesAmount: this.verticesAmount,
+      edgeThickness: this.edgeThickness,
+      edgesColor: this.edgesColor,
+      prismHeigth: this.prismHeigth,
+      prismWidth: this.prismWidth,
+      sideColor: this.sideColor,
+      sideOpacity: this.sideOpacity
+    }).initialize();
 
     this.scene.add(this.prism);
 
@@ -74,11 +110,31 @@ export class ThreeDEngine {
     this.mouseRotator = new MouseRotator({
       camera: this.camera,
       scene: this.scene,
-      canvasHeight: this.height,
-      canvasWidth: this.width
+      canvasHeight: this.canvasHeight,
+      canvasWidth: this.canvasWidth
     });
 
     return this;
+  }
+
+  public addEgdesClicker() {
+    if (this.prism === undefined) {
+      throw new Error("You must create 'PRISM' first");
+    }
+    this.edgeClicker = new EdgeClicker(this.camera, this.scene, {
+      canvasHeight: this.canvasHeight,
+      canvasWidth: this.canvasWidth,
+      defaultColor: this.edgesColor
+    });
+
+    return this;
+  }
+
+  public getClickedEdges() {
+    if (this.edgeClicker === undefined) {
+      throw new Error("You must create EDGES frist");
+    }
+    return this.edgeClicker.getClickedEdges();
   }
 
   private configCanvas() {
@@ -93,9 +149,6 @@ export class ThreeDEngine {
     const width = window.innerWidth / 24;
     const height = window.innerHeight / 24;
 
-    // const width = window.innerWidth;
-    // const height = window.innerHeight;
-
     this.camera = new OrthographicCamera(
       width / -2,
       width / 2,
@@ -109,14 +162,17 @@ export class ThreeDEngine {
       this.camera.position.set(item.x, item.y, item.z);
     });
 
-    this.renderer = new WebGLRenderer({ alpha: this.alphaBg, antialias: true });
+    this.renderer = new WebGLRenderer({
+      alpha: this.alphaBg,
+      antialias: true
+    });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.canvas.appendChild(this.renderer.domElement);
   }
   private onWindowResize(): any {
-    this.camera.aspect = window.innerWidth / window.innerHeight;
+    (this.camera.aspect = this.canvasWidth), this.canvasHeight;
     this.camera.updateProjectionMatrix();
 
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(this.canvasWidth, this.canvasHeight);
   }
 }

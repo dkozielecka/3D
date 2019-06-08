@@ -5,11 +5,12 @@ import {
   Quaternion,
   Raycaster,
   Scene,
-  Vector2
+  Vector2,
+  OrthographicCamera
 } from "three";
 
 export interface MouseRotatorConfig {
-  camera: PerspectiveCamera;
+  camera: OrthographicCamera;
   scene: Scene;
   rotateSpeed?: number;
   canvasWidth: number;
@@ -18,7 +19,7 @@ export interface MouseRotatorConfig {
 
 export class MouseRotator {
   private scene: Scene;
-  private camera: PerspectiveCamera;
+  private camera: OrthographicCamera;
   private raycaster: Raycaster = new Raycaster();
   private isDragging: boolean = false;
   private toRotate: Object3D;
