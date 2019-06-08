@@ -141,7 +141,7 @@ export class ThreeDEngine {
 
     this.colorClickedFace = config.colorClickedFace
       ? config.colorClickedFace
-      : new Color(0x000000);
+      : new Color(0xd2ff4d);
 
     this.faceClicker = new FaceClicker({
       camera: this.camera,

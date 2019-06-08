@@ -18,7 +18,7 @@ class WorkSapce {
       .addEgdesClicker()
       .addMouseRotator()
       .addFaceClicker({
-        colorClickedFace: new Color(0x123456)
+        colorClickedFace: new Color(0xd2ff4d)
       });
   }
 
