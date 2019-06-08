@@ -1,7 +1,8 @@
 import { Scene, OrthographicCamera, WebGLRenderer, Mesh, Color } from "three";
-import { MouseRotator } from "../eventsHandlers/MouseRotator";
+import { FaceClicker } from "../faceClickController/FaceClicker";
 import { Prism } from "../prism/Prism";
 import { EdgeClicker } from "../eventsHandlers/EdgeClicker";
+import { MouseRotator } from "../eventsHandlers/MouseRotator";
 
 export interface ThreeDEngineConfig {
   canvasHeight: number;
@@ -45,6 +46,7 @@ export class ThreeDEngine {
   private sideOpacity: number;
   private edgesColor: Color;
   private edgeThickness: number;
+  private faceClicker: FaceClicker;
 
   constructor(config: ThreeDEngineConfig) {
     this.canvasHeight = config.canvasHeight;
@@ -135,6 +137,21 @@ export class ThreeDEngine {
       throw new Error("You must create EDGES frist");
     }
     return this.edgeClicker.getClickedEdges();
+  }
+  public addFaceClicker() {
+    if (this.prism === undefined) {
+      throw new Error("You must create 'PRISM' first");
+    }
+
+    this.faceClicker = new FaceClicker({
+      camera: this.camera,
+      scene: this.scene,
+      canvasHeight: this.canvasHeight,
+      canvasWidth: this.canvasWidth,
+      renderer: this.renderer
+    });
+
+    return this;
   }
 
   private configCanvas() {

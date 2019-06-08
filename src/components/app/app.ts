@@ -12,7 +12,7 @@ class WorkSapce {
       .run()
       .createPrism()
       .addMouseRotator()
-      .addEgdesClicker();
+      .addFaceClicker();
   }
 
   private initSandbox() {

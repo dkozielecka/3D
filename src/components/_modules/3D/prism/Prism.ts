@@ -5,7 +5,7 @@ import {
   Color,
   EdgesGeometry,
   Vector3,
-  CylinderBufferGeometry
+  FaceColors
 } from "three";
 
 export interface PrismConfig {
@@ -58,7 +58,8 @@ export class Prism {
     this.material = new MeshBasicMaterial({
       color: this.sideColor,
       transparent: true,
-      opacity: this.sideOpacity
+      opacity: this.sideOpacity,
+      vertexColors: FaceColors
     });
 
     this.prism = new Mesh(this.geometry, this.material);
