@@ -1,5 +1,6 @@
 import "./app.scss";
 import { ThreeDEngine } from "../_modules/3D/engine/ThreeDEngine";
+import { Color } from "three";
 
 class WorkSapce {
   threeEngine: ThreeDEngine;
@@ -10,9 +11,15 @@ class WorkSapce {
     this.initSandbox();
     this.threeEngine
       .run()
-      .createPrism()
+      .createPrism({
+        prismWidth: 5,
+        prismHeigth: 7
+      })
+      .addEgdesClicker()
       .addMouseRotator()
-      .addFaceClicker();
+      .addFaceClicker({
+        colorClickedFace: new Color(0x123456)
+      });
   }
 
   private initSandbox() {

@@ -1,5 +1,5 @@
 import { Scene, OrthographicCamera, WebGLRenderer, Mesh, Color } from "three";
-import { FaceClicker } from "../faceClickController/FaceClicker";
+import { FaceClicker } from "../eventsHandlers/FaceClicker";
 import { Prism } from "../prism/Prism";
 import { EdgeClicker } from "../eventsHandlers/EdgeClicker";
 import { MouseRotator } from "../eventsHandlers/MouseRotator";
@@ -25,6 +25,7 @@ interface PrismConfig {
   sideOpacity?: number;
   edgesColor?: Color;
   edgeThickness?: number;
+  colorClickedFace?: Color;
 }
 
 export class ThreeDEngine {
@@ -47,6 +48,7 @@ export class ThreeDEngine {
   private edgesColor: Color;
   private edgeThickness: number;
   private faceClicker: FaceClicker;
+  private colorClickedFace: Color;
 
   constructor(config: ThreeDEngineConfig) {
     this.canvasHeight = config.canvasHeight;
@@ -132,26 +134,39 @@ export class ThreeDEngine {
     return this;
   }
 
-  public getClickedEdges() {
-    if (this.edgeClicker === undefined) {
-      throw new Error("You must create EDGES frist");
-    }
-    return this.edgeClicker.getClickedEdges();
-  }
-  public addFaceClicker() {
+  public addFaceClicker(config: PrismConfig = {}) {
     if (this.prism === undefined) {
       throw new Error("You must create 'PRISM' first");
     }
+
+    this.colorClickedFace = config.colorClickedFace
+      ? config.colorClickedFace
+      : new Color(0x000000);
 
     this.faceClicker = new FaceClicker({
       camera: this.camera,
       scene: this.scene,
       canvasHeight: this.canvasHeight,
       canvasWidth: this.canvasWidth,
-      renderer: this.renderer
+      renderer: this.renderer,
+      colorClickedFace: this.colorClickedFace,
+      defaultColor: this.sideColor
     });
-
     return this;
+  }
+
+  public getClickedEdges() {
+    if (this.edgeClicker === undefined) {
+      throw new Error("You must create 'EDGES' frist");
+    }
+    return this.edgeClicker.getClickedEdges();
+  }
+
+  public getClickedFaces() {
+    if (this.edgeClicker === undefined) {
+      throw new Error("You must create 'PRISM' frist");
+    }
+    return this.faceClicker.getClickedFaces();
   }
 
   private configCanvas() {

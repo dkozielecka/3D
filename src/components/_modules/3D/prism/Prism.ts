@@ -94,7 +94,9 @@ export class Prism {
 
       let cylinder = new Mesh(
         edge,
-        new MeshBasicMaterial({ color: this.edgesColor })
+        new MeshBasicMaterial({
+          color: this.edgesColor
+        })
       );
       cylinder.position.copy(startPoint);
       cylinder.lookAt(endPoint);
