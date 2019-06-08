@@ -11,7 +11,8 @@ class WorkSapce {
     this.threeEngine
       .run()
       .createPrism()
-      .addMouseRotator();
+      .addMouseRotator()
+      .addFaceClicker();
   }
 
   private initSandbox() {

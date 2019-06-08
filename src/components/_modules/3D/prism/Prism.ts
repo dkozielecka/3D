@@ -1,4 +1,4 @@
-import { CylinderGeometry, MeshBasicMaterial, Mesh, Color } from "three";
+import {CylinderGeometry, MeshBasicMaterial, Mesh, Color, BackSide, FaceColors} from "three";
 
 export interface PrismConfig {
   prismWidth?: number;
@@ -21,7 +21,7 @@ export class Prism {
   constructor(config: PrismConfig = {}) {
     this.prismWidth = config.prismWidth ? config.prismWidth : 4;
     this.prismHeigth = config.prismHeigth ? config.prismHeigth : 4;
-    this.verticesAmount = config.verticesAmount ? config.verticesAmount : 4;
+    this.verticesAmount = config.verticesAmount ? config.verticesAmount : 5;
     this.sideColor = config.sideColor ? config.sideColor : new Color(0x71bbf2);
     this.sideOpacity = config.sideOpacity ? config.sideOpacity : 0.8;
   }
@@ -43,7 +43,8 @@ export class Prism {
     this.material = new MeshBasicMaterial({
       color: this.sideColor,
       transparent: true,
-      opacity: this.sideOpacity
+      opacity: this.sideOpacity,
+      vertexColors: FaceColors
     });
 
     this.prism = new Mesh(this.geometry, this.material);

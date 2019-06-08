@@ -1,5 +1,6 @@
 import { Scene, OrthographicCamera, WebGLRenderer, Mesh } from "three";
 import { MouseRotator } from "../rotateController/MouseRotator";
+import { FaceClicker } from "../faceClickController/FaceClicker";
 import { Prism } from "../prism/Prism";
 
 export interface ThreeDEngineConfig {
@@ -26,6 +27,7 @@ export class ThreeDEngine {
   alphaBg: boolean;
   mouseRotator: MouseRotator;
   prism: Mesh;
+  private faceClicker: FaceClicker;
 
   constructor(config: ThreeDEngineConfig) {
     this.height = config.canvasHeight;
@@ -49,7 +51,9 @@ export class ThreeDEngine {
       throw new Error("You must 'RUN' word first");
     }
 
-    this.prism = new Prism({}).initialize();
+    this.prism = new Prism({
+        verticesAmount: 5
+    }).initialize();
 
     this.scene.add(this.prism);
 
@@ -80,6 +84,22 @@ export class ThreeDEngine {
 
     return this;
   }
+
+    public addFaceClicker() {
+        if (this.prism === undefined) {
+            throw new Error("You must create 'PRISM' first");
+        }
+
+        this.faceClicker = new FaceClicker({
+            camera: this.camera,
+            scene: this.scene,
+            canvasHeight: this.height,
+            canvasWidth: this.width,
+            renderer: this.renderer
+        });
+
+        return this;
+    }
 
   private configCanvas() {
     this.canvas = document.createElement("div");
