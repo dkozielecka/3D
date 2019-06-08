@@ -1,6 +1,6 @@
-import { Scene, OrthographicCamera, WebGLRenderer } from "three";
-import { Prism2 } from "../prism/prism2";
+import { Scene, OrthographicCamera, WebGLRenderer, Mesh } from "three";
 import { MouseRotator } from "../rotateController/MouseRotator";
+import { Prism } from "../prism/Prism";
 
 export interface ThreeDEngineConfig {
   canvasHeight: number;
@@ -18,7 +18,6 @@ export interface ThreeDEngineConfig {
 export class ThreeDEngine {
   height: number;
   width: number;
-  cube: Prism2;
   scene: Scene;
   camera: any;
   renderer: WebGLRenderer;
@@ -26,6 +25,7 @@ export class ThreeDEngine {
   cameraPosition;
   alphaBg: boolean;
   mouseRotator: MouseRotator;
+  prism: Mesh;
 
   constructor(config: ThreeDEngineConfig) {
     this.height = config.canvasHeight;
@@ -36,20 +36,22 @@ export class ThreeDEngine {
     this.alphaBg = config.alphaBg ? config.alphaBg : true;
   }
 
-  public initialize() {
+  public run() {
     this.configCanvas();
     this.initSunbox();
     window.addEventListener("resize", this.onWindowResize());
+
+    return this;
   }
 
   public createPrism() {
-    this.cube = new Prism2({ sideOpacity: 0.8 });
-    this.cube.createFromSides([65], [10, 10, 10, 10], 13);
+    if (this.scene === undefined) {
+      throw new Error("You must 'RUN' word first");
+    }
 
-    this.cube.figure.position.x = 0;
-    this.cube.figure.position.y = 0;
+    this.prism = new Prism({}).initialize();
 
-    this.scene.add(this.cube.figure);
+    this.scene.add(this.prism);
 
     this.camera.lookAt(this.scene.position);
 
@@ -60,15 +62,23 @@ export class ThreeDEngine {
       requestAnimationFrame(render);
     };
     render();
+
+    return this;
   }
 
   public addMouseRotator() {
+    if (this.prism === undefined) {
+      throw new Error("You must create 'PRISM' first");
+    }
+
     this.mouseRotator = new MouseRotator({
       camera: this.camera,
       scene: this.scene,
       canvasHeight: this.height,
       canvasWidth: this.width
     });
+
+    return this;
   }
 
   private configCanvas() {
@@ -82,6 +92,9 @@ export class ThreeDEngine {
 
     const width = window.innerWidth / 24;
     const height = window.innerHeight / 24;
+
+    // const width = window.innerWidth;
+    // const height = window.innerHeight;
 
     this.camera = new OrthographicCamera(
       width / -2,

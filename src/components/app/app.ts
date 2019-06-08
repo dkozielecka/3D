@@ -8,9 +8,10 @@ class WorkSapce {
 
   initialize() {
     this.initSandbox();
-    this.threeEngine.initialize();
-    this.threeEngine.createPrism();
-    this.threeEngine.addMouseRotator();
+    this.threeEngine
+      .run()
+      .createPrism()
+      .addMouseRotator();
   }
 
   private initSandbox() {
