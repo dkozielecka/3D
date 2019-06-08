@@ -12,8 +12,8 @@ export interface MouseRotatorConfig {
   camera: PerspectiveCamera;
   scene: Scene;
   rotateSpeed?: number;
-  windowWidth: number;
-  windowHeight: number;
+  canvasWidth: number;
+  canvasHeight: number;
 }
 
 export class MouseRotator {
@@ -32,8 +32,8 @@ export class MouseRotator {
     this.camera = config.camera;
     this.scene = config.scene;
     this.rotateSpeed = config.rotateSpeed ? config.rotateSpeed : 1;
-    this.windowWidth = config.windowWidth;
-    this.windowHeight = config.windowHeight;
+    this.windowWidth = config.canvasWidth;
+    this.windowHeight = config.canvasHeight;
 
     this.listenersController();
   }

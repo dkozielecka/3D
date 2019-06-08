@@ -1,28 +1,31 @@
 import "./app.scss";
 import { ThreeDEngine } from "../_modules/3D/engine/ThreeDEngine";
-import { Prism } from "../_modules/3D/prism/Prism";
 
 class WorkSapce {
   threeEngine: ThreeDEngine;
-  geometry: Prism;
 
   constructor() {}
 
-  public initialize() {
-    this.create3D();
+  initialize() {
+    this.initSandbox();
     this.threeEngine.initialize();
-    this.geometry.initialize();
+    this.threeEngine.createPrism();
+    this.threeEngine.addMouseRotator();
   }
 
-  private create3D() {
+  private initSandbox() {
     this.threeEngine = new ThreeDEngine({
-      height: window.innerHeight,
-      width: window.innerWidth
+      canvasHeight: window.innerHeight,
+      canvasWidth: window.innerWidth,
+      cameraPosition: [
+        {
+          x: 0,
+          y: 10,
+          z: 15
+        }
+      ]
     });
-
-    this.geometry = new Prism();
   }
 }
-
 const workspace = new WorkSapce();
 workspace.initialize();

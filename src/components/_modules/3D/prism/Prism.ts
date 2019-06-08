@@ -1,4 +1,14 @@
-import { Color, Geometry, Vector3, Face3 } from "three";
+import {
+  Color,
+  Geometry,
+  Vector3,
+  Face3,
+  MeshBasicMaterial,
+  DoubleSide,
+  Mesh,
+  Scene,
+  BoxGeometry
+} from "three";
 
 export interface PrismConfig {
   size?: number;
@@ -9,6 +19,7 @@ export interface PrismConfig {
   addEdgdeHelpers?: boolean;
   activeEdgeColor?: Color;
   activeEdgeIndex?: number;
+  scene: Scene;
 }
 
 export class Prism {
@@ -21,8 +32,11 @@ export class Prism {
   addEdgeHelpers: boolean;
   activeEdgeIndex: number;
   geometry: Geometry;
+  material: MeshBasicMaterial;
+  mesh: Mesh;
+  scene: Scene;
 
-  constructor(config: PrismConfig = {}) {
+  constructor(config: PrismConfig) {
     this.size = config.size ? config.size : 1;
     this.edgeThickness = config.edgeThickness ? config.edgeThickness : 0.1;
     this.sideColor = config.sideColor
@@ -37,18 +51,36 @@ export class Prism {
       ? config.addEdgdeHelpers
       : true;
     this.activeEdgeIndex = config.activeEdgeIndex ? config.activeEdgeIndex : 0;
+    this.scene = config.scene;
   }
 
   public initialize() {
-    this.createPrism();
+    this.createGeometry();
+    this.createMaterial();
+    this.createMesh();
   }
 
-  private createPrism() {
-    this.geometry = new Geometry();
-    this.geometry.vertices.push(new Vector3(-10, 10, 0));
-    this.geometry.vertices.push(new Vector3(-10, -10, 0));
-    this.geometry.vertices.push(new Vector3(10, -10, 0));
-    this.geometry.faces.push(new Face3(0, 1, 2));
-    this.geometry.computeBoundingSphere();
+  private createGeometry() {
+    this.geometry = new BoxGeometry(1, 1, 1);
+
+    // this.geometry.vertices.push(new Vector3(-10, 10, 0));
+    // this.geometry.vertices.push(new Vector3(-10, -10, 0));
+    // this.geometry.vertices.push(new Vector3(10, -10, 0));
+    // this.geometry.faces.push(new Face3(0, 1, 2));
+    // this.geometry.computeBoundingSphere();
+  }
+
+  private createMaterial() {
+    this.material = new MeshBasicMaterial({
+      color: this.sideColor[0],
+      side: DoubleSide
+    });
+  }
+  private createMesh() {
+    this.mesh = new Mesh(this.geometry, this.material);
+
+    this.mesh.position.set(1, 0, 0);
+
+    this.scene.add(this.mesh);
   }
 }
