@@ -22,7 +22,7 @@ export class EdgeClicker {
   private raycaster: Raycaster = new Raycaster();
   private mousePosition: Vector2 = new Vector2();
   private clickedEdgeColor: MeshBasicMaterial = new MeshBasicMaterial({
-    color: "#99ff66"
+    color: "#71CE49"
   });
   private clickedEdges: Intersection;
   private canvasHeight: number;

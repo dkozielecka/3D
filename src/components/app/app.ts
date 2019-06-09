@@ -11,10 +11,7 @@ class WorkSpace {
     this.initSandbox();
     this.threeEngine
       .run()
-      .createPrism({
-        prismWidth: 5,
-        prismHeight: 7
-      })
+      .createPrism()
       .addEgdesClicker()
       .addMouseRotator()
       .addFaceClicker({

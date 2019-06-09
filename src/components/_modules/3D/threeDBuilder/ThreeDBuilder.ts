@@ -71,14 +71,14 @@ export class ThreeDBuilder {
     if (this.scene === undefined) {
       throw new Error("You must 'RUN' word first");
     }
-    this.prismWidth = config.prismWidth ? config.prismWidth : 8;
-    this.prismHeigth = config.prismHeight ? config.prismHeight : 8;
-    this.verticesAmount = config.verticesAmount ? config.verticesAmount : 6;
-    this.sideColor = config.sideColor ? config.sideColor : new Color(0x333333);
+    this.prismWidth = config.prismWidth ? config.prismWidth : 5;
+    this.prismHeigth = config.prismHeight ? config.prismHeight : 7;
+    this.verticesAmount = config.verticesAmount ? config.verticesAmount : 4;
+    this.sideColor = config.sideColor ? config.sideColor : new Color(0xF2E8A8);
     this.sideOpacity = config.sideOpacity ? config.sideOpacity : 0.9;
     this.edgesColor = config.edgesColor
       ? config.edgesColor
-      : new Color(0x005aa9);
+      : new Color(0x6F6472);
     this.edgeThickness = config.edgeThickness ? config.edgeThickness : 0.1;
 
     this.prism = new Prism({
@@ -128,7 +128,7 @@ export class ThreeDBuilder {
     this.edgeClicker = new EdgeClicker(this.camera, this.scene, {
       canvasHeight: this.canvasHeight,
       canvasWidth: this.canvasWidth,
-      defaultColor: this.edgesColor
+      defaultColor: this.edgesColor,
     });
 
     return this;
@@ -141,7 +141,7 @@ export class ThreeDBuilder {
 
     this.colorClickedFace = config.colorClickedFace
       ? config.colorClickedFace
-      : new Color(0xd2ff4d);
+      : new Color(0x71CE49);
 
     this.faceClicker = new FaceClicker({
       camera: this.camera,
