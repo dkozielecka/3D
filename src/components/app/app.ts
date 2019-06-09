@@ -1,6 +1,6 @@
 import "./app.scss";
-import { ThreeDBuilder } from "../_modules/3D/threeDBuilder/ThreeDEngine";
 import { Color } from "three";
+import { ThreeDBuilder } from "../_modules/3D/threeDBuilder/ThreeDBuilder";
 
 class WorkSpace {
   threeEngine: ThreeDBuilder;
