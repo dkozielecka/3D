@@ -9,6 +9,7 @@ import {
   Color
 } from "three";
 import { Intersection } from "three/src/core/Raycaster";
+import {getTypeScriptInstance} from "ts-loader/dist/types/instances";
 
 export interface FaceClickerConfig {
   camera: PerspectiveCamera;
@@ -17,7 +18,6 @@ export interface FaceClickerConfig {
   canvasHeight: number;
   renderer: WebGLRenderer;
   colorClickedFace: Color;
-  defaultColor: Color;
 }
 
 export class FaceClicker {
@@ -28,7 +28,7 @@ export class FaceClicker {
   private windowWidth: number;
   private windowHeight: number;
   private renderer: WebGLRenderer;
-  private clickedFaces: Intersection;
+  private clickedFace: Intersection;
   private colorClickedFace: Color;
   private defaultColor: Color;
 
@@ -40,19 +40,18 @@ export class FaceClicker {
     this.renderer = config.renderer;
     this.listenersController();
     this.colorClickedFace = config.colorClickedFace;
-    this.defaultColor = config.defaultColor;
   }
 
   public getClickedFaces(): Intersection {
-    return this.clickedFaces;
+    return this.clickedFace;
   }
 
   private listenersController(): void {
     document.addEventListener("click", event => {
       this.getCurrentMousePosition(event);
-      this.clickedFaces = this.getObjectOnMouseDown();
-      if (this.isObjectAMeshFace(this.clickedFaces)) {
-        this.colorFace(this.clickedFaces);
+      this.clickedFace = this.getObjectOnMouseDown();
+      if (this.isObjectAMeshFace(this.clickedFace)) {
+        this.colorFace(this.clickedFace);
       }
     });
   }
@@ -67,8 +66,8 @@ export class FaceClicker {
 
     let intersects = this.raycaster.intersectObjects(this.scene.children, true);
 
-    this.clickedFaces = intersects.length === 0 ? null : intersects[0];
-    return this.clickedFaces;
+    this.clickedFace = intersects.length === 0 ? null : intersects[0];
+    return this.clickedFace;
   }
 
   private isObjectAMeshFace(clickedFaces: Intersection): boolean {
@@ -86,11 +85,14 @@ export class FaceClicker {
     return mesh.geometry as CylinderGeometry;
   }
 
-  private colorFace(clickedFaces: Intersection) {
-    let geometry = this.obtainCylinderGeometry(clickedFaces);
+  private colorFace(clickedFace: Intersection) {
+    let geometry = this.obtainCylinderGeometry(clickedFace);
+
+    if (this.defaultColor == null)
+        this.defaultColor = new Color(clickedFace.face.color.getHex());
 
     geometry.faces
-      .filter(f => f.c == clickedFaces.face.c)
+      .filter(f => f.c == clickedFace.face.c)
       .forEach(f =>
         f.color.getHex() === this.colorClickedFace.getHex()
           ? f.color.set(this.defaultColor)

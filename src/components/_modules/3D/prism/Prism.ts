@@ -1,12 +1,12 @@
 import {
-  CylinderGeometry,
-  MeshBasicMaterial,
-  Mesh,
-  Color,
-  EdgesGeometry,
-  Vector3,
-  FaceColors,
-  MeshLambertMaterial
+    CylinderGeometry,
+    MeshBasicMaterial,
+    Mesh,
+    Color,
+    EdgesGeometry,
+    Vector3,
+    FaceColors,
+    MeshLambertMaterial, DoubleSide, FrontSide, BackSide, NoBlending, NeverDepth
 } from "three";
 
 export interface PrismConfig {
@@ -58,6 +58,7 @@ export class Prism {
 
     this.material = new MeshBasicMaterial({
       color: this.sideColor,
+      depthFunc: NeverDepth,
       transparent: true,
       opacity: this.sideOpacity,
       vertexColors: FaceColors

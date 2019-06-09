@@ -13,7 +13,7 @@ class WorkSapce {
       .run()
       .createPrism({
         prismWidth: 5,
-        prismHeigth: 7
+        prismHeight: 7
       })
       .addEgdesClicker()
       .addMouseRotator()

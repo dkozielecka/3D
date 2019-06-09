@@ -19,7 +19,7 @@ export interface ThreeDEngineConfig {
 
 interface PrismConfig {
   prismWidth?: number;
-  prismHeigth?: number;
+  prismHeight?: number;
   verticesAmount?: number;
   sideColor?: Color;
   sideOpacity?: number;
@@ -72,7 +72,7 @@ export class ThreeDEngine {
       throw new Error("You must 'RUN' word first");
     }
     this.prismWidth = config.prismWidth ? config.prismWidth : 8;
-    this.prismHeigth = config.prismHeigth ? config.prismHeigth : 8;
+    this.prismHeigth = config.prismHeight ? config.prismHeight : 8;
     this.verticesAmount = config.verticesAmount ? config.verticesAmount : 4;
     this.sideColor = config.sideColor ? config.sideColor : new Color(0x333333);
     this.sideOpacity = config.sideOpacity ? config.sideOpacity : 0.9;
@@ -149,8 +149,7 @@ export class ThreeDEngine {
       canvasHeight: this.canvasHeight,
       canvasWidth: this.canvasWidth,
       renderer: this.renderer,
-      colorClickedFace: this.colorClickedFace,
-      defaultColor: this.sideColor
+      colorClickedFace: this.colorClickedFace
     });
     return this;
   }
