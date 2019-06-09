@@ -1,15 +1,16 @@
 import {
-  CylinderGeometry,
-  Mesh,
-  PerspectiveCamera,
-  Raycaster,
-  Scene,
-  Vector2,
-  WebGLRenderer,
-  Color
+    CylinderGeometry,
+    Mesh,
+    PerspectiveCamera,
+    Raycaster,
+    Scene,
+    Vector2,
+    WebGLRenderer,
+    Color, Face3
 } from "three";
 import { Intersection } from "three/src/core/Raycaster";
 import {getTypeScriptInstance} from "ts-loader/dist/types/instances";
+import {Prism} from "../prism/Prism";
 
 export interface FaceClickerConfig {
   camera: PerspectiveCamera;
@@ -42,8 +43,19 @@ export class FaceClicker {
     this.colorClickedFace = config.colorClickedFace;
   }
 
-  public getClickedFaces(): Intersection {
-    return this.clickedFace;
+  public getClickedFaces(mesh: Mesh): Face3[] {
+      let faces = (mesh.geometry as CylinderGeometry).faces;
+      return faces.filter(f => f.color.getHex() === this.colorClickedFace.getHex());
+  }
+
+  public getBottomFaces(mesh: Mesh): Face3[] {
+      let faces = (mesh.geometry as CylinderGeometry).faces;
+      return faces.filter(f => f.normal.y !== 0);
+  }
+
+  public getSideFaces(mesh: Mesh): Face3[] {
+      let faces = (mesh.geometry as CylinderGeometry).faces;
+      return faces.filter(f => f.normal.y === 0);
   }
 
   private listenersController(): void {

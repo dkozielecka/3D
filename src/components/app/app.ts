@@ -1,9 +1,9 @@
 import "./app.scss";
-import { ThreeDEngine } from "../_modules/3D/engine/ThreeDEngine";
+import { ThreeDBuilder } from "../_modules/3D/threeDBuilder/ThreeDEngine";
 import { Color } from "three";
 
-class WorkSapce {
-  threeEngine: ThreeDEngine;
+class WorkSpace {
+  threeEngine: ThreeDBuilder;
 
   constructor() {}
 
@@ -20,10 +20,15 @@ class WorkSapce {
       .addFaceClicker({
         colorClickedFace: new Color(0xd2ff4d)
       });
+
+    // TODO: Move this to the game: Checking if sides are properly clicked:
+    let engine = this.threeEngine;
+    setInterval(function () {console.log("bottom faces: " + engine.areAllBottomFacesClicked())}, 2000);
+    setInterval(function () {console.log("side faces: " + engine.areAllSideFacesClicked())}, 2000);
   }
 
   private initSandbox() {
-    this.threeEngine = new ThreeDEngine({
+    this.threeEngine = new ThreeDBuilder({
       canvasHeight: window.innerHeight,
       canvasWidth: window.innerWidth,
       cameraPosition: [
@@ -36,5 +41,5 @@ class WorkSapce {
     });
   }
 }
-const workspace = new WorkSapce();
+const workspace = new WorkSpace();
 workspace.initialize();

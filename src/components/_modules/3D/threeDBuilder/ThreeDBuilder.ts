@@ -1,10 +1,10 @@
-import { Scene, OrthographicCamera, WebGLRenderer, Mesh, Color } from "three";
+import {Scene, OrthographicCamera, WebGLRenderer, Mesh, Color, CylinderGeometry, Face3} from "three";
 import { FaceClicker } from "../eventsHandlers/FaceClicker";
 import { Prism } from "../prism/Prism";
 import { EdgeClicker } from "../eventsHandlers/EdgeClicker";
 import { MouseRotator } from "../eventsHandlers/MouseRotator";
 
-export interface ThreeDEngineConfig {
+export interface ThreeDBuilderConfig {
   canvasHeight: number;
   canvasWidth: number;
   cameraPosition?: [
@@ -28,7 +28,7 @@ interface PrismConfig {
   colorClickedFace?: Color;
 }
 
-export class ThreeDEngine {
+export class ThreeDBuilder {
   private canvasHeight: number;
   private canvasWidth: number;
   private scene: Scene;
@@ -50,7 +50,7 @@ export class ThreeDEngine {
   private faceClicker: FaceClicker;
   private colorClickedFace: Color;
 
-  constructor(config: ThreeDEngineConfig) {
+  constructor(config: ThreeDBuilderConfig) {
     this.canvasHeight = config.canvasHeight;
     this.canvasWidth = config.canvasWidth;
     this.cameraPosition = config.cameraPosition
@@ -73,7 +73,7 @@ export class ThreeDEngine {
     }
     this.prismWidth = config.prismWidth ? config.prismWidth : 8;
     this.prismHeigth = config.prismHeight ? config.prismHeight : 8;
-    this.verticesAmount = config.verticesAmount ? config.verticesAmount : 4;
+    this.verticesAmount = config.verticesAmount ? config.verticesAmount : 6;
     this.sideColor = config.sideColor ? config.sideColor : new Color(0x333333);
     this.sideOpacity = config.sideOpacity ? config.sideOpacity : 0.9;
     this.edgesColor = config.edgesColor
@@ -154,19 +154,27 @@ export class ThreeDEngine {
     return this;
   }
 
-  public getClickedEdges() {
-    if (this.edgeClicker === undefined) {
-      throw new Error("You must create 'EDGES' frist");
-    }
-    return this.edgeClicker.getClickedEdges();
+  public areAllBottomFacesClicked(): boolean {
+    let clickedFaces: Face3[] = this.faceClicker.getClickedFaces(this.prism);
+    let bottomFaces: Face3[] = this.faceClicker.getBottomFaces(this.prism);
+
+    // Wrong number of faces has been clicked
+    if (clickedFaces.length !== bottomFaces.length)
+      return false;
+
+    return clickedFaces.every(f => bottomFaces.includes(f));
   }
 
-  public getClickedFaces() {
-    if (this.edgeClicker === undefined) {
-      throw new Error("You must create 'PRISM' frist");
+    public areAllSideFacesClicked(): boolean {
+      let clickedFaces: Face3[] = this.faceClicker.getClickedFaces(this.prism);
+      let sideFaces: Face3[] = this.faceClicker.getSideFaces(this.prism);
+
+      // Wrong number of faces has been clicked
+      if (clickedFaces.length !== sideFaces.length)
+          return false;
+
+      return clickedFaces.every(f => sideFaces.includes(f));
     }
-    return this.faceClicker.getClickedFaces();
-  }
 
   private configCanvas() {
     this.canvas = document.createElement("div");
